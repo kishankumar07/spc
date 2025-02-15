@@ -1,32 +1,39 @@
 import { create } from "zustand";
 
+// FYI - isLoggedIn will be true and userId will be having a value only when the user is loggedin or signup.
+//- once loggedout isLoggedIn will be false and userId will be null.
+
+// The overall interfaces generally for all items in the auth zustand store
 interface AuthStore {
   isLoggedIn: boolean;
-  login: () => void;
-  logout: () => void;
+  userId: string | null;
   signUp: (email: string, password: string) => Promise<void>;
   logIn: (email: string, password: string) => Promise<void>;
+  logOut: () => void;
 }
 
+
+
 // Function to safely retrieve the auth state from localStorage
+//Also need to check its meaning later.
 const getInitialAuthState = () => {
-  
-    return JSON.parse(localStorage.getItem("isLoggedIn") || "false");
+  if (typeof window !== "undefined") {
+    return {
+      isLoggedIn: JSON.parse(localStorage.getItem("isLoggedIn") || "false"),
+      userId: localStorage.getItem("userId") || null,
+    };
+  }
+  return { isLoggedIn: false, userId: null };
 };
 
 
-export const useAuthStore = create<AuthStore>((set) => ({
-  isLoggedIn: getInitialAuthState(),
-  login: () => {
-    set({ isLoggedIn: true });
-    localStorage.setItem("isLoggedIn", JSON.stringify(true));
-  },
-  logout: () => {
-    set({ isLoggedIn: false });
-    localStorage.removeItem("isLoggedIn"); // Remove auth state from localStorage
-  },
 
-  signUp: async (email: string, password: string) => {
+// Defining the store
+export const useAuthStore = create<AuthStore>((set) => ({
+   ...getInitialAuthState(),
+ 
+   //In signup, the user once created, their userId created and isLoggedIn is set in the Zustand store and also in Localstorage.
+   signUp: async (email, password) => {
     try {
       const response = await fetch("/api/auth/signup", {
         method: "POST",
@@ -36,11 +43,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
       const data = await response.json();
       
-      if (data.message === "User created successfully") {
-        set({ isLoggedIn: true });
+      if (data.message === "User created successfully" && data.userId) {
+        set({ isLoggedIn: true, userId: data.userId });
 
-        // To save the isLoggedIn value in localStorage
-        localStorage.setItem("isLoggedIn",JSON.stringify(true))
+        // Store in localStorage
+        localStorage.setItem("isLoggedIn", JSON.stringify(true));
+        localStorage.setItem("userId", data.userId);
       } else {
         throw new Error(data.message || "Failed to create user");
       }
@@ -48,8 +56,8 @@ export const useAuthStore = create<AuthStore>((set) => ({
       throw new Error(error.message || "Something went wrong");
     }
   },
-
-  logIn: async (email: string, password: string) => {
+// In login ; email and password will be sent through the body, finally the isLoggedIn and userId of the user will be stored in localStorage as well as in Zustand store.
+  logIn: async (email, password) => {
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -59,11 +67,12 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
       const data = await response.json();
       
-      if (data.message === "Login successful") {
-        set({ isLoggedIn: true });
+      if (data.message === "Login successful" && data.userId) {
+        set({ isLoggedIn: true, userId: data.userId });
 
-        // setting isLoggedIn value in localStorage
-        localStorage.setItem("isLoggedIn",JSON.stringify(true))
+        // Store in localStorage
+        localStorage.setItem("isLoggedIn", JSON.stringify(true));
+        localStorage.setItem("userId", data.userId);
       } else {
         throw new Error(data.message || "Failed to log in");
       }
@@ -71,4 +80,11 @@ export const useAuthStore = create<AuthStore>((set) => ({
       throw new Error(error.message || "Something went wrong");
     }
   },
-}));
+
+  logOut: () => {
+    set({ isLoggedIn: false, userId: null });
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("userId");
+  },
+})
+)

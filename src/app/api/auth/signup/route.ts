@@ -22,9 +22,12 @@ export const POST = async (req: Request) => {
     const user = new User({ email, password: hashedPassword });
     await user.save();
 
-    return new Response(JSON.stringify({ message: "User created successfully" }), { status: 201 });
+    return new Response(JSON.stringify({ message: "User created successfully", userId: user.id }), { status: 201 });
+
   } catch (error) {
+
     console.error("Error in signup at api/signup:",error.message)
     return new Response(JSON.stringify({ message: "Error creating user" }), { status: 500 });
+    
   }
 };

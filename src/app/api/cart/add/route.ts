@@ -1,0 +1,28 @@
+import connectToDatabase from "@/lib/mongodb";
+import Cart from "@/models/Cart";
+
+export const POST = async (req: Request) => {
+  try {
+    await connectToDatabase();
+    const { userId, product } = await req.json();
+
+    let cart = await Cart.findOne({ userId });
+
+    if (!cart) {
+      cart = new Cart({ userId, items: [product] });
+    } else {
+      const existingItem = cart.items.find((item) => item.productId === product.productId);
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.items.push(product);
+      }
+    }
+
+    await cart.save();
+    return new Response(JSON.stringify({ message: "Added to cart successfully" }), { status: 200 });
+  } catch (error) {
+    console.error("Error adding to cart:", error.message);
+    return new Response(JSON.stringify({ message: "Error adding to cart" }), { status: 500 });
+  }
+};
