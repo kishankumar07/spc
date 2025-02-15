@@ -15,7 +15,7 @@ interface CartState {
   fetchCart: () => Promise<void>;
   addToCart: ( product: CartItem ) => Promise<void>;
   removeFromCart: ( productId: number ) => Promise<void>;
-  
+  updateCartItemQuantity:(productId:number, change:number) => Promise<void>;
 }
 
 export const useCartStore = create<CartState>((set,get) => ({
@@ -56,7 +56,22 @@ export const useCartStore = create<CartState>((set,get) => ({
       cartItems: [...state.cartItems, { ...product, quantity: 1 }],
     }));
   },
-
+  updateCartItemQuantity: async (productId, change) => {
+    const { userId } = useAuthStore.getState();
+    if (!userId) return;
+  
+    await fetch("/api/cart/update", {
+      method: "POST",
+      body: JSON.stringify({ userId, productId, change }),
+    });
+  
+    set((state) => ({
+      cartItems: state.cartItems.map((item) =>
+        item.productId === productId ? { ...item, quantity: item.quantity + change } : item
+      ).filter(item => item.quantity > 0) // Remove if quantity is 0
+    }));
+  },
+  
   removeFromCart: async ( productId ) => {
 
     const { userId } = useAuthStore.getState();
