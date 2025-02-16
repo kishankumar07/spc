@@ -14,6 +14,85 @@ interface Product {
   thumbnail: string;
 }
 
+
+const allProducts: Product[] = [
+  {
+    id: 1,
+    title: "rightACRYLIC",
+    price: 80,
+    thumbnail: "/imageAssets/rightAcrylic.webp",
+  },
+  {
+    id: 2,
+    title: "Solid Surface",
+    price: 625,
+    thumbnail: "/imageAssets/solidSurface.webp",
+  },
+  {
+    id: 3,
+    title: "rightLAM",
+    price: 29,
+    thumbnail: "/imageAssets/rightLam.webp",
+  },
+  {
+    id: 4,
+    title: "PP Wall Decor Panels",
+    price: 65,
+    thumbnail: "/imageAssets/pp wall decor.webp",
+  },
+  {
+    id: 5,
+    title: "rightTAPES",
+    price: 5,
+    thumbnail: "/imageAssets/rightTapes.webp",
+  },
+  {
+    id: 6,
+    title: "Digital Signage",
+    price: 914,
+    thumbnail: "/imageAssets/dsignage.webp",
+  },
+  {
+    id: 7,
+    title: "rightPC",
+    price: 171,
+    thumbnail: "/imageAssets/rightPc.webp",
+  },
+  {
+    id: 8,
+    title: "rightCAL",
+    price: 80,
+    thumbnail: "/imageAssets/rcal.webp",
+  },
+  {
+    id: 9,
+    title: "rightGRAPHICS",
+    price: 26,
+    thumbnail: "/imageAssets/rgraphics.webp",
+  },
+  {
+    id: 10,
+    title: "rightPET",
+    price: 6,
+    thumbnail: "/imageAssets/rpet.webp",
+  },
+  {
+    id: 11,
+    title: "rightABS",
+    price: 6,
+    thumbnail: "/imageAssets/rabs.webp",
+  },
+  {
+    id: 12,
+    title: "Roll up Stands",
+    price: 20,
+    thumbnail: "/imageAssets/rstands.webp",
+  },
+];
+
+
+
+
 export default function ProductListing() {
   // in the products state below this line, the dummy content will be stored
   const [products, setProducts] = useState<Product[]>([]);
@@ -28,15 +107,12 @@ const fetchRandomProducts = () => {
 
   if (typeof window === "undefined") return; // Ensures it's a client-side operation
 
-      const randomSkip = Math.floor(Math.random() * 80); // DummyJSON has ~100 products
-      fetch(`https://dummyjson.com/products?limit=6&skip=${randomSkip}`)
-        .then((res) => res.json())
-        .then((data) => setProducts(data.products))
-        .catch((err) => console.error("Failed to fetch products:", err));
+     const shuffled = allProducts.sort(() => 0.5 - Math.random());
+     setProducts(shuffled.slice(0,6)); // Get 6 random products from the array.
     };
   
     useEffect(() => {
-      fetchRandomProducts();
+      fetchRandomProducts()
     }, []);
 
 
@@ -91,7 +167,7 @@ const fetchRandomProducts = () => {
         {/* This button is the refresh button when clicked will again fetch another random content */}
         <button
           onClick={fetchRandomProducts}
-          className="mb-4 bg-gray-500 text-white py-2 px-4 rounded-md hover:bg-gray-600"
+          className="mb-4 bg-blue-500 text-white py-2 px-4 rounded-md flex items-center gap-2 hover:bg-blue-600 transition-all duration-300"
         >
          <span className="flex gap-3">
              Refresh Products  <RotateCw />

@@ -7,6 +7,7 @@ interface CartItem {
   price: number;
   thumbnail: string;
   quantity: number;
+
 }
 
 // This one defines the structure of the cart (Zustand) store.
@@ -16,11 +17,18 @@ interface CartState {
   addToCart: ( product: CartItem ) => Promise<void>;
   removeFromCart: ( productId: number ) => Promise<void>;
   updateCartItemQuantity:(productId:number, change:number) => Promise<void>;
+  address: string;
+  setAddress: (newAddress: string) => void;
+  selectedPaymentMethod: "COD" | "Stripe" | null;
+  setPaymentMethod : (method: "COD" | "Stripe") => void;
+  clearCart : () => void;
 }
 
 export const useCartStore = create<CartState>((set,get) => ({
   // this below variable cartItems get filled with what all cart items this user has 
   cartItems: [],
+  address: "",
+  setAddress: (newAddress: string) => set({ address: newAddress }),
 
   fetchCart: async () => {
     if (typeof window === "undefined") return; // Prevents SSR issues
@@ -85,5 +93,24 @@ export const useCartStore = create<CartState>((set,get) => ({
       cartItems: state.cartItems.filter((item) => item.productId !== productId),
     }));
   },
+  selectedPaymentMethod: null,
+  setPaymentMethod: (method) => set(()=>({selectedPaymentMethod: method})),
+
+  clearCart: async () => {
+  const { userId } = useAuthStore.getState();
+  if (!userId) return;
+
+  try {
+    await fetch("/api/cart/clear", {
+      method: "POST",
+      body: JSON.stringify({ userId }),
+    });
+    
+    set(() => ({ cartItems: [], address: "", selectedPaymentMethod: null }));
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+  }
+},
+
 
 }));
