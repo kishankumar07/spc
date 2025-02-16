@@ -30,7 +30,7 @@ export default function LoginPage() {
                 });
 
       } catch (error) {
-         Swal.fire("Error", error.message || "Something went wrong", "error");
+         Swal.fire("Error", (error as Error).message || "Something went wrong", "error");
       }
 
 
@@ -69,7 +69,7 @@ export default function LoginPage() {
           Login
         </button>
         <div className="mt-4 text-center">
-          <span className="text-sm text-gray-600">Don't have an account? </span>
+          <span className="text-sm text-gray-600">Do not have an account? </span>
           <button onClick={() => router.push("/register")} className="text-blue-600 hover:underline">Register</button>
         </div>
       </div>

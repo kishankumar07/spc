@@ -26,7 +26,7 @@ export const POST = async (req: Request) => {
 
   } catch (error) {
 
-    console.error("Error in signup at api/signup:",error.message)
+    console.error("Error in signup at api/signup:",(error as Error).message)
     return new Response(JSON.stringify({ message: "Error creating user" }), { status: 500 });
     
   }

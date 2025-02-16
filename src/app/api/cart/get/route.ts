@@ -9,7 +9,7 @@ export const POST = async (req: Request) => {
     const cart = await Cart.findOne({ userId }) || { items: [] };
     return new Response(JSON.stringify(cart), { status: 200 });
   } catch (error) {
-    console.error("Error fetching cart:", error.message);
+    console.error("Error fetching cart:", (error as Error).message);
     return new Response(JSON.stringify({ message: "Error fetching cart" }), { status: 500 });
   }
 };

@@ -66,7 +66,7 @@ export default function Header() {
   return (
     <>
       {/* Header */}
-      <header className="flex justify-between items-center px-8 py-5 shadow-md bg-white md:px-32">
+      <header className="flex justify-between items-center px-8 py-5 shadow-md bg-white sm:px-32">
         {/* Logo */}
         <div
           className="text-2xl font-bold cursor-pointer"
@@ -82,7 +82,7 @@ export default function Header() {
         </div>
 
         {/* Desktop View: Cart & Logout ---------- It is visible only from medium screen only*/}
-        <div className="hidden md:flex items-center gap-7">
+        <div className="hidden sm:flex items-center gap-7">
           {isLoggedIn ? (
             <>
               {/* Cart */}
@@ -201,7 +201,7 @@ export default function Header() {
 
         {/* Mobile View: Hamburger Menu */}
         <button
-          className="md:hidden p-2 rounded-lg hover:bg-gray-100"
+          className="sm:hidden p-2 rounded-lg hover:bg-gray-100"
           onClick={() => setSidebarOpen(true)}
         >
           <Menu size={28} />

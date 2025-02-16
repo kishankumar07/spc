@@ -25,7 +25,7 @@ export const POST = async (req: Request) => {
     
   } catch (error) {
 
-    console.error("error in login:",error.message)
+    console.error("error in login:", (error as Error).message)
     return new Response(JSON.stringify({ message: "Error logging in" }), { status: 500 });
 
   }

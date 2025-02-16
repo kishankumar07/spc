@@ -24,7 +24,7 @@ interface CartState {
   clearCart : () => void;
 }
 
-export const useCartStore = create<CartState>((set,get) => ({
+export const useCartStore = create<CartState>((set) => ({
   // this below variable cartItems get filled with what all cart items this user has 
   cartItems: [],
   address: "",

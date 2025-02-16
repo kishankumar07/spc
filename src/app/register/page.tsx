@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 export default function SignUpPage() {
   const router = useRouter();
-  const { signUp, isLoggedIn } = useAuthStore();
+  const { signUp } = useAuthStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -25,7 +25,7 @@ export default function SignUpPage() {
         Swal.fire("Success", "Account created successfully. You are now logged in.", "success");
         router.push("/products"); // Redirect after successful sign-up
       } catch (error) {
-        Swal.fire("Error", error.message || "Something went wrong", "error");
+        Swal.fire("Error", (error as Error).message || "Something went wrong", "error");
       }
     };
   

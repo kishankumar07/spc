@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    domains: ['cdn.dummyjson.com'], // Add the external image domain here
+    domains: ["upload.wikimedia.org",], // Add the external image domain here
   },
 };
 

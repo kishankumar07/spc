@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { create } from "zustand";
 
 // FYI - isLoggedIn will be true and userId will be having a value only when the user is loggedin or signup.

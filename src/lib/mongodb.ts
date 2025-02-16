@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://kta6161:kta6161@spc.fpaza.mongodb.net/?retryWrites=true&w=majority&appName=spc";
+const MONGODB_URI = process.env.MONGODB_URI ;
 
 if (!MONGODB_URI) {
   throw new Error("MongoDB URI is required");
@@ -11,10 +12,12 @@ interface MongooseCache {
   promise: Promise<typeof mongoose> | null;
 }
 
-let cached: MongooseCache = globalThis.mongoose || { conn: null, promise: null };
+
+let cached: MongooseCache = (globalThis as any).mongoose || { conn: null, promise: null };
 
 if (!cached) {
-  cached = globalThis.mongoose = { conn: null, promise: null };
+  (globalThis as any).mongoose = { conn: null, promise: null };
+  cached = (globalThis as any).mongoose;
 }
 
 const connectToDatabase = async () => {
