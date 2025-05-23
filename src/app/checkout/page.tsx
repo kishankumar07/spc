@@ -11,6 +11,8 @@ import {
   SquarePlus,
   SquareMinus,
   MapPinHouse,
+  Plus,
+  Minus,
 } from "lucide-react";
 import { useCartStore } from "@/store/cart";
 import Image from "next/image";
@@ -376,10 +378,10 @@ export default function Checkout() {
                       />
 
                       <div className="flex-1 ">
-                        <p className="font-semibold sm:text-sm text-xs">
+                        <p className="font-semibold sm:text-lg text-sm">
                           {item.title}
                         </p>
-                        <p className="text-gray-600 sm:text-sm text-xs sm:mt-0 mt-2">
+                        <p className="text-gray-600 sm:text-lg text-sm sm:mt-0 mt-2">
                           ${item.price}
                         </p>
                       </div>
@@ -392,16 +394,17 @@ export default function Checkout() {
                             handleDecrease(item.productId, item.quantity)
                           }
                         >
-                          <SquareMinus className="sm:size-5 size-4" />
+                         <Minus className="sm:size-6 size-5 p-1 rounded-xl transition-all duration-200 ease-in-out transform hover:scale-110 hover:bg-slate-300 active:scale-95 cursor-pointer" />
+
                         </button>
-                        <span className="sm:text-sm font-bold text-xs">
+                        <span className="sm:text-lg font-bold text-sm">
                           {item.quantity}
                         </span>
                         <button
                           className="px-2 rounded"
                           onClick={() => handleIncrease(item.productId)}
                         >
-                          <SquarePlus className="sm:size-5 size-4" />
+                          <Plus className="sm:size-6 size-5 p-1 rounded-xl transition-all duration-200 ease-in-out transform hover:scale-110 hover:bg-slate-300 active:scale-95 cursor-pointer" />
                         </button>
                       </div>
 
@@ -409,7 +412,7 @@ export default function Checkout() {
                         className="sm:ml-4 flex"
                         style={{ minWidth: "80px", justifyContent: "flex-end" }}
                       >
-                        <p className="font-semibold sm:text-sm text-xs">
+                        <p className="font-semibold sm:text-lg text-sm">
                           ${(item.price * item.quantity).toFixed(2)}
                         </p>
                       </div>

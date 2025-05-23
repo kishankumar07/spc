@@ -1,7 +1,9 @@
+
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from '../components/Header';
+import ClientHeaderWrapper from "@/components/ClientHeaderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -16,7 +18,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Single Page Checkout",
   description: "Checkout for jr middle east",
-  icons: "/jrFavicon.jfif"
+  icons: "/jRLogo.svg"
 };
 
 export default function RootLayout({
@@ -29,7 +31,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased `}>
         
         {/* Layout for basic header to be displayed over all pages. */}
-        <Header />
+        <ClientHeaderWrapper />
         <main className="p-6">{children}</main>
       </body>
     </html>

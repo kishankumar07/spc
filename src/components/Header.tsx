@@ -1,6 +1,3 @@
-"use client";
-
-
 import { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ShoppingCart, User, LogOut, CircleX, Menu, X } from "lucide-react";
@@ -11,22 +8,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function Header() {
-  const cartRef = useRef<HTMLDivElement>(null);
+
+
+  const [mounted, setMounted] = useState(false);
+  const cartRef = useRef<HTMLDivElement>(null); // ✅ hook above early return
   const router = useRouter();
   const { isLoggedIn, logOut } = useAuthStore();
   const cartStore = useCartStore();
-
-  // Handle Next.js hydration issue by ensuring cartCount is accessed only on the client
-  // cartCount is a variable with type of number from cart
-
-  // Handle Next.js hydration issue
-  // Prevent accessing Zustand store during SSR
   const [cartCount, setCartCount] = useState<number | null>(null);
   const [showDropdown, setShowDropdown] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(false); // New state for sidebar
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  // all hooks first — no conditionals before this point
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
-    cartStore.fetchCart(); // Fetch cart on mount
+    cartStore.fetchCart();
   }, []);
 
   useEffect(() => {
@@ -39,12 +38,13 @@ export default function Header() {
         setShowDropdown(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  if (!mounted) return null; // ✅ only after ALL hooks have been declared
 
   const handleRemove = async (productId: number, event: React.MouseEvent) => {
     event.stopPropagation(); // Prevent dropdown from closing
@@ -73,7 +73,7 @@ export default function Header() {
           onClick={() => router.push("/")}
         >
           <Image
-            src={"/jrLogo.svg"}
+            src={"/JustRightLogo.svg"}
             alt={"justRightLogo"}
             width={150}
             height={100}

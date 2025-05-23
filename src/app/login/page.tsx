@@ -36,9 +36,30 @@ export default function LoginPage() {
 
     
   }
-  return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
+ return (
+  <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="bg-white flex w-full max-w-4xl rounded-2xl shadow-lg overflow-hidden">
+      
+
+{/* left Column: Image */}
+      <div className="hidden md:block md:w-1/2">
+        <img
+          src="/imageAssets/loginPage_1.png"
+          alt="Login Visual"
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+
+
+
+
+
+
+
+
+      {/* right Column: Login Form */}
+      <div className="w-full md:w-1/2 p-8">
         <h2 className="text-2xl font-semibold mb-6">Login</h2>
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
@@ -73,6 +94,10 @@ export default function LoginPage() {
           <button onClick={() => router.push("/register")} className="text-blue-600 hover:underline">Register</button>
         </div>
       </div>
+
+      
     </div>
-  );
+  </div>
+);
+
 }
